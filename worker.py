@@ -1,9 +1,10 @@
 import asyncio, json, time
 from app.services.verifier import verify
 import aioredis
+import os
 
 async def worker_loop():
-    redis = aioredis.from_url("redis://localhost:6379/0")
+    redis = aioredis.from_url(os.environ["REDIS_URL"])
     while True:
         _, item = await redis.brpop("tx_queue", timeout=5)
         if not item:
